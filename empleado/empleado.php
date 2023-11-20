@@ -3,12 +3,12 @@ include "../includes/header.php";
 ?>
 
 <!-- TÍTULO. Cambiarlo, pero dejar especificada la analogía -->
-<h1 class="mt-3">Entidad análoga a CLIENTE (NOMBRE)</h1>
+<h1 class="mt-3">Entidad análoga a CLIENTE (EMPLEADO)</h1>
 
 <!-- FORMULARIO. Cambiar los campos de acuerdo a su trabajo -->
 <div class="formulario p-4 m-3 border rounded-3">
 
-    <form action="cliente_insert.php" method="post" class="form-group">
+    <form action="empleado_insert.php" method="post" class="form-group">
 
         <div class="mb-3">
             <label for="cedula" class="form-label">Cédula</label>
@@ -21,8 +21,13 @@ include "../includes/header.php";
         </div>
 
         <div class="mb-3">
-            <label for="celular" class="form-label">Celular</label>
-            <input type="number" class="form-control" id="celular" name="celular" required>
+            <label for="fecha_contratacion" class="form-label">Fecha contratación</label>
+            <input type="date" class="form-control" id="fecha_contratacion" name="fecha_contratacion" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="salario" class="form-label">Salario</label>
+            <input type="number" class="form-control" id="salario" name="salario" required>
         </div>
 
         <button type="submit" class="btn btn-primary">Agregar</button>
@@ -33,10 +38,10 @@ include "../includes/header.php";
 
 <?php
 // Importar el código del otro archivo
-require("cliente_select.php");
+require("empleado_select.php");
 
 // Verificar si llegan datos
-if($resultadoCliente and $resultadoCliente->num_rows > 0):
+if($resultadoEmpleado and $resultadoEmpleado->num_rows > 0):
 ?>
 
 <!-- MOSTRAR LA TABLA. Cambiar las cabeceras -->
@@ -49,7 +54,8 @@ if($resultadoCliente and $resultadoCliente->num_rows > 0):
             <tr>
                 <th scope="col" class="text-center">Cédula</th>
                 <th scope="col" class="text-center">Nombre</th>
-                <th scope="col" class="text-center">Celular</th>
+                <th scope="col" class="text-center">Fecha contratación</th>
+                <th scope="col" class="text-center">Salario</th>
                 <th scope="col" class="text-center">Acciones</th>
             </tr>
         </thead>
@@ -58,7 +64,7 @@ if($resultadoCliente and $resultadoCliente->num_rows > 0):
 
             <?php
             // Iterar sobre los registros que llegaron
-            foreach ($resultadoCliente as $fila):
+            foreach ($resultadoEmpleado as $fila):
             ?>
 
             <!-- Fila que se generará -->
@@ -66,11 +72,12 @@ if($resultadoCliente and $resultadoCliente->num_rows > 0):
                 <!-- Cada una de las columnas, con su valor correspondiente -->
                 <td class="text-center"><?= $fila["cedula"]; ?></td>
                 <td class="text-center"><?= $fila["nombre"]; ?></td>
-                <td class="text-center"><?= $fila["celular"]; ?></td>
+                <td class="text-center"><?= $fila["fecha_contratacion"]; ?></td>
+                <td class="text-center"><?= $fila["salario"]; ?></td>
                 
                 <!-- Botón de eliminar. Debe de incluir la CP de la entidad para identificarla -->
                 <td class="text-center">
-                    <form action="cliente_delete.php" method="post">
+                    <form action="empleado_delete.php" method="post">
                         <input hidden type="text" name="cedulaEliminar" value="<?= $fila["cedula"]; ?>">
                         <button type="submit" class="btn btn-danger">Eliminar</button>
                     </form>

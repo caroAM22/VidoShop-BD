@@ -1,0 +1,20 @@
+CREATE TABLE empleado( 
+  cedula INT(10) PRIMARY KEY,
+  nombre VARCHAR(50) NOT NULL,
+  fecha_contratacion DATE NOT NULL, 
+  salario DECIMAL(10, 2) CHECK (salario > 0) NOT NULL
+);
+
+
+CREATE TABLE pedido( 
+  codigo INT AUTO_INCREMENT PRIMARY KEY,
+  fecha_de_compra DATE NOT NULL, 
+  costo_total DECIMAL(8, 2) CHECK(costo_total > 0) NOT NULL,
+  tipo_de_pedido VARCHAR(10) CHECK (tipo_de_pedido IN ('Virtual', 'Presencial')) NOT NULL, 
+  direccion_de_envio VARCHAR(50), 
+  CHECK (
+    (tipo_de_pedido = 'Virtual' AND direccion_de_envio IS NOT NULL)
+    OR 
+    (tipo_de_pedido = 'Presencial' AND direccion_de_envio IS NULL)
+  )
+);
