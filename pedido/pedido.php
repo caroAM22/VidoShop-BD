@@ -12,7 +12,7 @@ include "../includes/header.php";
 
         <div class="mb-3">
             <label for="codigo" class="form-label">Código</label>
-            <input type="number" class="form-control" id="codigo" name="codigo" required>
+            <input type="number" class="form-control" id="codigo" name="codigo">
         </div>
 
         <div class="mb-3">
@@ -32,33 +32,59 @@ include "../includes/header.php";
 
         <div class="mb-3">
             <label for="direccion_envio" class="form-label">Dirección de envío</label>
-            <input type="text" class="form-control" id="direccion_envio" name="direccion_envio" required>
+            <input type="text" class="form-control" id="direccion_envio" name="direccion_envio">
         </div>
         
-        <!-- Consultar la lista de empleados y desplegarlos -->
         <div class="mb-3">
-            <label for="empleado" class="form-label">Empleado</label>
-            <select name="empleado" id="empleado" class="form-select">
-                
+            <label for="empleado_atiende" class="form-label">Empleado que atiende</label>
+            <select name="empleado_atiende" id="empleado_atiende" class="form-select">
                 <!-- Option por defecto -->
                 <option value="" selected disabled hidden></option>
 
                 <?php
                 // Importar el código del otro archivo
                 require("../empleado/empleado_select.php");
-                
+
                 // Verificar si llegan datos
-                if($resultadoEmpleado):
-                    
+                if ($resultadoEmpleado) :
+
                     // Iterar sobre los registros que llegaron
                     foreach ($resultadoEmpleado as $fila):
                 ?>
 
-                <!-- Opción que se genera -->
-                <option value="<?= $fila["cedula"]; ?>"><?= $fila["nombre"]; ?> - C.C. <?= $fila["cedula"]; ?></option>
+                        <!-- Opción que se genera -->
+                        <!-- Opción que se genera -->
+                        <option value="<?= $fila["cedula"]; ?>"><?= $fila["cedula"]; ?></option>
+                <?php
+                    // Cerrar los estructuras de control
+                    endforeach;
+                endif;
+                ?>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="empleado_envia" class="form-label">Empleado que envía</label>
+            <select name="empleado_envia" id="empleado_envia" class="form-select">
+                <!-- Option por defecto -->
+                <option value="" selected disabled hidden></option>
 
                 <?php
-                        // Cerrar los estructuras de control
+                // Importar el código del otro archivo
+                require("../empleado/empleado_select.php");
+
+                // Verificar si llegan datos
+                if ($resultadoEmpleado) :
+
+                    // Iterar sobre los registros que llegaron
+                    foreach ($resultadoEmpleado as $fila):
+                ?>
+
+                        <!-- Opción que se genera -->
+                        <!-- Opción que se genera -->
+                        <option value="<?= $fila["cedula"]; ?>"><?= $fila["cedula"]; ?></option>
+                <?php
+                    // Cerrar los estructuras de control
                     endforeach;
                 endif;
                 ?>
@@ -92,7 +118,8 @@ if($resultadoPedido and $resultadoPedido->num_rows > 0):
                 <th scope="col" class="text-center">Costo total</th>
                 <th scope="col" class="text-center">Tipo de pedido</th>
                 <th scope="col" class="text-center">Dirección de envío</th>
-                <th scope="col" class="text-center">Empleado</th>
+                <th scope="col" class="text-center">Empleado que atiende</th>
+                <th scope="col" class="text-center">Empleado que envía</th>
                 <th scope="col" class="text-center">Acciones</th>
             </tr>
         </thead>
@@ -110,9 +137,11 @@ if($resultadoPedido and $resultadoPedido->num_rows > 0):
                 <td class="text-center"><?= $fila["codigo"]; ?></td>
                 <td class="text-center"><?= $fila["fecha_compra"]; ?></td>
                 <td class="text-center">$<?= $fila["costo_total"]; ?></td>
-                <td class="text-center">$<?= $fila["tipo_pedido"]; ?></td>
-                <td class="text-center">$<?= $fila["direccion_envio"]; ?></td>
-                <td class="text-center">C.C. <?= $fila["empleado"]; ?></td>
+                <td class="text-center"><?= $fila["tipo_pedido"]; ?></td>
+                <td class="text-center"><?= $fila["direccion_envio"]; ?></td>
+                <td class="text-center"><?= $fila["empleado_atiende"] !== null ? 'C.C. ' . $fila["empleado_atiende"] : ''; ?></td>
+                <td class="text-center"><?= $fila["empleado_envia"] !== null ? 'C.C. ' . $fila["empleado_envia"] : ''; ?></td>
+
                 
                 <!-- Botón de eliminar. Debe de incluir la CP de la entidad para identificarla -->
                 <td class="text-center">

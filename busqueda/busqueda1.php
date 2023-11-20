@@ -6,59 +6,47 @@ include "../includes/header.php";
 <h1 class="mt-3">Búsqueda 1</h1>
 
 <p class="mt-3">
-    Dos fechas f1 y f2 (cada fecha con día, mes y año), f2 ≥ f1 y un número entero n,
-    n ≥ 0. Se debe mostrar la cédula y el celular de todos los clientes que han 
-    revisado exactamente n proyectos en dicho rango de fechas [f1, f2].
+    Este formulario permite ingresar la cédula de un empleado. 
+    Luego, se muestra el código y la fecha de compra de todos los pedidos que el empleado atendió, 
+    siempre y cuando estos pedidos no hayan sido enviados por algún empleado.
 </p>
 
 <!-- FORMULARIO. Cambiar los campos de acuerdo a su trabajo -->
 <div class="formulario p-4 m-3 border rounded-3">
 
-    <!-- En esta caso, el Action va a esta mismo archivo -->
+    <!-- En esta caso, el Action va a este mismo archivo -->
     <form action="busqueda1.php" method="post" class="form-group">
 
         <div class="mb-3">
-            <label for="fecha1" class="form-label">Fecha 1</label>
-            <input type="date" class="form-control" id="fecha1" name="fecha1" required>
+            <label for="cedula" class="form-label">Cédula del Empleado</label>
+            <input type="text" class="form-control" id="cedula" name="cedula" required>
         </div>
 
-        <div class="mb-3">
-            <label for="fecha2" class="form-label">Fecha 2</label>
-            <input type="date" class="form-control" id="fecha2" name="fecha2" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="numero" class="form-label">Número</label>
-            <input type="number" class="form-control" id="numero" name="numero" required>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Buscar</button>
+        <button type="submit" class="btn btn-primary">Buscar Pedidos</button>
 
     </form>
     
 </div>
 
 <?php
-// Dado que el action apunta a este mismo archivo, hay que hacer eata verificación antes
+// Dado que el action apunta a este mismo archivo, hay que hacer esta verificación antes
 if ($_SERVER['REQUEST_METHOD'] === 'POST'):
 
     // Crear conexión con la BD
     require('../config/conexion.php');
 
-    $fecha1 = $_POST["fecha1"];
-    $fecha2 = $_POST["fecha2"];
-    $numero = $_POST["numero"];
+    $cedula = $_POST["cedula"];
 
-    // Query SQL a la BD -> Crearla acá (No está completada, cambiarla a su contexto y a su analogía)
-    $query = "SELECT cedula, celular FROM cliente";
+    // Query SQL a la BD para obtener los pedidos del empleado
+    $query = "SELECT codigo, fecha_compra FROM pedido WHERE empleado_atiende = '$cedula' AND empleado_envia IS NULL";
 
     // Ejecutar la consulta
-    $resultadoB1 = mysqli_query($conn, $query) or die(mysqli_error($conn));
+    $resultadoPedido = mysqli_query($conn, $query) or die(mysqli_error($conn));
 
     mysqli_close($conn);
 
     // Verificar si llegan datos
-    if($resultadoB1 and $resultadoB1->num_rows > 0):
+    if($resultadoPedido and $resultadoPedido->num_rows > 0):
 ?>
 
 <!-- MOSTRAR LA TABLA. Cambiar las cabeceras -->
@@ -69,8 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
         <!-- Títulos de la tabla, cambiarlos -->
         <thead class="table-dark">
             <tr>
-                <th scope="col" class="text-center">Cédula</th>
-                <th scope="col" class="text-center">Celular</th>
+                <th scope="col" class="text-center">Código</th>
+                <th scope="col" class="text-center">Fecha de Compra</th>
             </tr>
         </thead>
 
@@ -78,14 +66,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
 
             <?php
             // Iterar sobre los registros que llegaron
-            foreach ($resultadoB1 as $fila):
+            foreach ($resultadoPedido as $fila):
             ?>
 
             <!-- Fila que se generará -->
             <tr>
                 <!-- Cada una de las columnas, con su valor correspondiente -->
-                <td class="text-center"><?= $fila["cedula"]; ?></td>
-                <td class="text-center"><?= $fila["celular"]; ?></td>
+                <td class="text-center"><?= $fila["codigo"]; ?></td>
+                <td class="text-center"><?= $fila["fecha_compra"]; ?></td>
             </tr>
 
             <?php

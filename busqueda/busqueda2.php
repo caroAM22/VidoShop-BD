@@ -6,9 +6,10 @@ include "../includes/header.php";
 <h1 class="mt-3">Búsqueda 2</h1>
 
 <p class="mt-3">
-    Dos números enteros n1 y n2, n1 ≥ 0, n2 > n1. Se debe mostrar el nit y el 
-    nombre de todas las empresas que han revisado entre n1 y n2 proyectos
-    (intervalo cerrado [n1, n2]).
+    Este formulario permite ingresar dos fechas f1 y f2 (cada fecha con día, mes y año),
+    f2 >= f1 y una dirección. Se debe mostrar todos los datos de los pedidos que tienen fecha de
+    creación entre f1 (inclusive) y f2 (inclusive), que son de la dirección ingresada,
+    que fueron atendidas por algún empleado y que fueron enviados por algún empleado.
 </p>
 
 <!-- FORMULARIO. Cambiar los campos de acuerdo a su trabajo -->
@@ -18,33 +19,43 @@ include "../includes/header.php";
     <form action="busqueda2.php" method="post" class="form-group">
 
         <div class="mb-3">
-            <label for="numero1" class="form-label">Numero 1</label>
-            <input type="number" class="form-control" id="numero1" name="numero1" required>
+            <label for="fecha1" class="form-label">Fecha Inicial</label>
+            <input type="date" class="form-control" id="fecha1" name="fecha1" required>
         </div>
 
         <div class="mb-3">
-            <label for="numero2" class="form-label">Numero 2</label>
-            <input type="number" class="form-control" id="numero2" name="numero2" required>
+            <label for="fecha2" class="form-label">Fecha Final</label>
+            <input type="date" class="form-control" id="fecha2" name="fecha2" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="direccion" class="form-label">Dirección</label>
+            <input type="text" class="form-control" id="direccion" name="direccion" required>
         </div>
 
         <button type="submit" class="btn btn-primary">Buscar</button>
 
     </form>
-    
+
 </div>
 
 <?php
-// Dado que el action apunta a este mismo archivo, hay que hacer eata verificación antes
+// Dado que el action apunta a este mismo archivo, hay que hacer esta verificación antes
 if ($_SERVER['REQUEST_METHOD'] === 'POST'):
 
     // Crear conexión con la BD
     require('../config/conexion.php');
 
-    $numero1 = $_POST["numero1"];
-    $numero2 = $_POST["numero2"];
+    $fecha1 = $_POST["fecha1"];
+    $fecha2 = $_POST["fecha2"];
+    $direccion = $_POST["direccion"];
 
-    // Query SQL a la BD -> Crearla acá (No está completada, cambiarla a su contexto y a su analogía)
-    $query = "SELECT nit, nombre FROM empresa";
+    // Query SQL a la BD
+    $query = "SELECT * FROM pedido 
+              WHERE fecha_compra BETWEEN '$fecha1' AND '$fecha2' 
+              AND direccion_envio = '$direccion'
+              AND empleado_atiende IS NOT NULL
+              AND empleado_envia IS NOT NULL";
 
     // Ejecutar la consulta
     $resultadoB2 = mysqli_query($conn, $query) or die(mysqli_error($conn));
@@ -52,54 +63,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
     mysqli_close($conn);
 
     // Verificar si llegan datos
-    if($resultadoB2 and $resultadoB2->num_rows > 0):
+    if ($resultadoB2 and $resultadoB2->num_rows > 0):
 ?>
 
-<!-- MOSTRAR LA TABLA. Cambiar las cabeceras -->
-<div class="tabla mt-5 mx-3 rounded-3 overflow-hidden">
+    <!-- MOSTRAR LA TABLA. Cambiar las cabeceras -->
+    <div class="tabla mt-5 mx-3 rounded-3 overflow-hidden">
 
-    <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered">
 
-        <!-- Títulos de la tabla, cambiarlos -->
-        <thead class="table-dark">
-            <tr>
-                <th scope="col" class="text-center">Cédula</th>
-                <th scope="col" class="text-center">Celular</th>
-            </tr>
-        </thead>
+            <!-- Títulos de la tabla, cambiarlos -->
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col" class="text-center">Código</th>
+                    <th scope="col" class="text-center">Fecha de Compra</th>
+                    <th scope="col" class="text-center">Costo Total</th>
+                    <th scope="col" class="text-center">Tipo de Pedido</th>
+                    <th scope="col" class="text-center">Dirección de Envío</th>
+                    <th scope="col" class="text-center">Empleado que Atiende</th>
+                    <th scope="col" class="text-center">Empleado que Envia</th>
+                </tr>
+            </thead>
 
-        <tbody>
+            <tbody>
 
-            <?php
-            // Iterar sobre los registros que llegaron
-            foreach ($resultadoB2 as $fila):
-            ?>
+                <?php
+                // Iterar sobre los registros que llegaron
+                foreach ($resultadoB2 as $fila):
+                ?>
 
-            <!-- Fila que se generará -->
-            <tr>
-                <!-- Cada una de las columnas, con su valor correspondiente -->
-                <td class="text-center"><?= $fila["cedula"]; ?></td>
-                <td class="text-center"><?= $fila["celular"]; ?></td>
-            </tr>
+                    <!-- Fila que se generará -->
+                    <tr>
+                        <!-- Cada una de las columnas, con su valor correspondiente -->
+                        <td class="text-center"><?= $fila["codigo"]; ?></td>
+                        <td class="text-center"><?= $fila["fecha_compra"]; ?></td>
+                        <td class="text-center"><?= $fila["costo_total"]; ?></td>
+                        <td class="text-center"><?= $fila["tipo_pedido"]; ?></td>
+                        <td class="text-center"><?= $fila["direccion_envio"]; ?></td>
+                        <td class="text-center"><?= $fila["empleado_atiende"]; ?></td>
+                        <td class="text-center"><?= $fila["empleado_envia"]; ?></td>
+                    </tr>
 
-            <?php
-            // Cerrar los estructuras de control
-            endforeach;
-            ?>
+                <?php
+                // Cerrar los estructuras de control
+                endforeach;
+                ?>
 
-        </tbody>
+            </tbody>
 
-    </table>
-</div>
+        </table>
+    </div>
 
-<!-- Mensaje de error si no hay resultados -->
-<?php
-else:
-?>
+    <!-- Mensaje de error si no hay resultados -->
+<?php else : ?>
 
-<div class="alert alert-danger text-center mt-5">
-    No se encontraron resultados para esta consulta
-</div>
+    <div class="alert alert-danger text-center mt-5">
+        No se encontraron resultados para esta consulta
+    </div>
 
 <?php
     endif;

@@ -6,79 +6,76 @@ include "../includes/header.php";
 <h1 class="mt-3">Consulta 2</h1>
 
 <p class="mt-3">
-    Sea sumavalor la suma de los valores de todos los proyectos asociados con un cliente.
-    El segundo botón debe mostrar el código y el valor de cada uno de los proyectos 
-    que cumple todas las siguientes condiciones: tiene un valor mayor que el 
-    presupuesto de la empresa que lo revisa y además el cliente que lo revisa es el 
-    gerente de la empresa que lo revisa.
+    La segunda consulta muestra la cédula, el nombre y el número de
+    pedidos que atendió cada empleado que cumple las siguientes dos condiciones:
+
+    <ol>
+        <li>Todos sus pedidos tienen la misma dirección.</li>
+        <li>Debe tener al menos tres pedidos (es decir, deber tener 3, 4 o más pedidos).</li>
+    </ol>
 </p>
 
-<?php
-// Crear conexión con la BD
-require('../config/conexion.php');
-
-// Query SQL a la BD -> Crearla acá (No está completada, cambiarla a su contexto y a su analogía)
-$query = "SELECT codigo, valor FROM proyecto";
-
-// Ejecutar la consulta
-$resultadoC2 = mysqli_query($conn, $query) or die(mysqli_error($conn));
-
-mysqli_close($conn);
-?>
 
 <?php
-// Verificar si llegan datos
-if($resultadoC2 and $resultadoC2->num_rows > 0):
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    require('../config/conexion.php');
+
+    $query = "SELECT e.cedula, e.nombre, COUNT(p.codigo) AS num_pedidos
+              FROM empleado e
+              JOIN pedido p ON e.cedula = p.empleado_atiende
+              WHERE p.direccion_envio IS NOT NULL
+                AND (
+                    SELECT COUNT(DISTINCT direccion_envio)
+                    FROM pedido
+                    WHERE empleado_atiende = e.cedula
+                ) = 1
+              GROUP BY e.cedula, e.nombre
+              HAVING num_pedidos >= 3";
+
+    $resultadoC2 = mysqli_query($conn, $query) or die(mysqli_error($conn));
+
+    mysqli_close($conn);
+
+    if ($resultadoC2 and $resultadoC2->num_rows > 0):
 ?>
 
-<!-- MOSTRAR LA TABLA. Cambiar las cabeceras -->
+<!-- MOSTRAR LA TABLA -->
 <div class="tabla mt-5 mx-3 rounded-3 overflow-hidden">
-
     <table class="table table-striped table-bordered">
-
-        <!-- Títulos de la tabla, cambiarlos -->
         <thead class="table-dark">
             <tr>
                 <th scope="col" class="text-center">Cédula</th>
                 <th scope="col" class="text-center">Nombre</th>
+                <th scope="col" class="text-center">Número de Pedidos</th>
             </tr>
         </thead>
-
         <tbody>
-
             <?php
-            // Iterar sobre los registros que llegaron
             foreach ($resultadoC2 as $fila):
             ?>
-
-            <!-- Fila que se generará -->
             <tr>
-                <!-- Cada una de las columnas, con su valor correspondiente -->
                 <td class="text-center"><?= $fila["cedula"]; ?></td>
                 <td class="text-center"><?= $fila["nombre"]; ?></td>
+                <td class="text-center"><?= $fila["num_pedidos"]; ?></td>
             </tr>
-
             <?php
-            // Cerrar los estructuras de control
             endforeach;
             ?>
-
         </tbody>
-
     </table>
 </div>
 
 <!-- Mensaje de error si no hay resultados -->
 <?php
-else:
+    else:
 ?>
-
 <div class="alert alert-danger text-center mt-5">
     No se encontraron resultados para esta consulta
 </div>
-
 <?php
-endif;
+    endif;
+}
 
 include "../includes/footer.php";
 ?>
