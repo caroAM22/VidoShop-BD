@@ -1,20 +1,21 @@
-CREATE TABLE empleado( 
+use vido_shop;
+
+CREATE TABLE cliente( 
   cedula INT(10) PRIMARY KEY,
   nombre VARCHAR(50) NOT NULL,
-  fecha_contratacion DATE NOT NULL, 
-  salario DECIMAL(10, 2) CHECK (salario > 0) NOT NULL
+  numero_contacto INT(10) CHECK(numero_contacto > 0) NOT NULL, 
+  saldo INT(8) CHECK (saldo > 0) NOT NULL,
+  correo_electronico VARCHAR(50)
 );
 
-
-CREATE TABLE pedido( 
+CREATE TABLE bono_regalo( 
   codigo INT AUTO_INCREMENT PRIMARY KEY,
-  fecha_de_compra DATE NOT NULL, 
-  costo_total DECIMAL(8, 2) CHECK(costo_total > 0) NOT NULL,
-  tipo_de_pedido VARCHAR(10) CHECK (tipo_de_pedido IN ('Virtual', 'Presencial')) NOT NULL, 
-  direccion_de_envio VARCHAR(50), 
-  CHECK (
-    (tipo_de_pedido = 'Virtual' AND direccion_de_envio IS NOT NULL)
-    OR 
-    (tipo_de_pedido = 'Presencial' AND direccion_de_envio IS NULL)
-  )
+  fecha_creacion DATE NOT NULL, 
+  valor INT(6) CHECK(valor > 0) NOT NULL,
+  mes VARCHAR(10) CHECK(mes IN ("Enero","Febrero","Marzo","Septiembre","Noviembre")) NOT NULL, 
+  cliente_dueño INT(10), 
+  cliente_utiliza INT(10), 
+  FOREIGN KEY (cliente_dueño) REFERENCES cliente(cedula),
+  FOREIGN KEY (cliente_utiliza) REFERENCES cliente(cedula),
+  CHECK (cliente_dueño <> cliente_utiliza)
 );

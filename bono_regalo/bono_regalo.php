@@ -3,53 +3,43 @@ include "../includes/header.php";
 ?>
 
 <!-- TÍTULO. Cambiarlo, pero dejar especificada la analogía -->
-<h1 class="mt-3">Entidad análoga a EMPRESA (PEDIDO)</h1>
+<h1 class="mt-3">Entidad análoga a CASILLERO (BONO REGALO)</h1>
 
 <!-- FORMULARIO. Cambiar los campos de acuerdo a su trabajo -->
 <div class="formulario p-4 m-3 border rounded-3">
 
-    <form action="pedido_insert.php" method="post" class="form-group">
+    <form action="bono_regalo_insert.php" method="post" class="form-group">
 
         <div class="mb-3">
-            <label for="codigo" class="form-label">Código</label>
-            <input type="number" class="form-control" id="codigo" name="codigo">
+            <label for="fecha_creacion" class="form-label">Fecha de creación</label>
+            <input type="date" class="form-control" id="fecha_creacion" name="fecha_creacion" required>
         </div>
 
         <div class="mb-3">
-            <label for="fecha_compra" class="form-label">Fecha de compra</label>
-            <input type="date" class="form-control" id="fecha_compra" name="fecha_compra" required>
+            <label for="valor" class="form-label">Valor</label>
+            <input type="number" class="form-control" id="valor" name="valor" required>
         </div>
 
         <div class="mb-3">
-            <label for="costo_total" class="form-label">Costo total</label>
-            <input type="number" class="form-control" id="costo_total" name="costo_total" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="tipo_pedido" class="form-label">Tipo de pedido</label>
-            <input type="text" class="form-control" id="tipo_pedido" name="tipo_pedido" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="direccion_envio" class="form-label">Dirección de envío</label>
-            <input type="text" class="form-control" id="direccion_envio" name="direccion_envio">
+            <label for="mes" class="form-label">Mes</label>
+            <input type="text" class="form-control" id="mes" name="mes" required>
         </div>
         
         <div class="mb-3">
-            <label for="empleado_atiende" class="form-label">Empleado que atiende</label>
-            <select name="empleado_atiende" id="empleado_atiende" class="form-select">
+            <label for="cliente_dueno" class="form-label">Cliente dueño</label>
+            <select name="cliente_dueno" id="cliente_dueno" class="form-select">
                 <!-- Option por defecto -->
                 <option value="" selected disabled hidden></option>
 
                 <?php
                 // Importar el código del otro archivo
-                require("../empleado/empleado_select.php");
+                require("../cliente/cliente_select.php");
 
                 // Verificar si llegan datos
-                if ($resultadoEmpleado) :
+                if ($resultadoCliente) :
 
                     // Iterar sobre los registros que llegaron
-                    foreach ($resultadoEmpleado as $fila):
+                    foreach ($resultadoCliente as $fila):
                 ?>
 
                         <!-- Opción que se genera -->
@@ -64,20 +54,20 @@ include "../includes/header.php";
         </div>
 
         <div class="mb-3">
-            <label for="empleado_envia" class="form-label">Empleado que envía</label>
-            <select name="empleado_envia" id="empleado_envia" class="form-select">
+            <label for="cliente_utiliza" class="form-label">Cliente que utiliza</label>
+            <select name="cliente_utiliza" id="cliente_utiliza" class="form-select">
                 <!-- Option por defecto -->
                 <option value="" selected disabled hidden></option>
 
                 <?php
                 // Importar el código del otro archivo
-                require("../empleado/empleado_select.php");
+                require("../cliente/cliente_select.php");
 
                 // Verificar si llegan datos
-                if ($resultadoEmpleado) :
+                if ($resultadoCliente) :
 
                     // Iterar sobre los registros que llegaron
-                    foreach ($resultadoEmpleado as $fila):
+                    foreach ($resultadoCliente as $fila):
                 ?>
 
                         <!-- Opción que se genera -->
@@ -99,10 +89,10 @@ include "../includes/header.php";
 
 <?php
 // Importar el código del otro archivo
-require("pedido_select.php");
+require("bono_regalo_select.php");
 
 // Verificar si llegan datos
-if($resultadoPedido and $resultadoPedido->num_rows > 0):
+if($resultadoBonoRegalo and $resultadoBonoRegalo->num_rows > 0):
 ?>
 
 <!-- MOSTRAR LA TABLA. Cambiar las cabeceras -->
@@ -114,12 +104,11 @@ if($resultadoPedido and $resultadoPedido->num_rows > 0):
         <thead class="table-dark">
             <tr>
                 <th scope="col" class="text-center">Código</th>
-                <th scope="col" class="text-center">Fecha de compra</th>
-                <th scope="col" class="text-center">Costo total</th>
-                <th scope="col" class="text-center">Tipo de pedido</th>
-                <th scope="col" class="text-center">Dirección de envío</th>
-                <th scope="col" class="text-center">Empleado que atiende</th>
-                <th scope="col" class="text-center">Empleado que envía</th>
+                <th scope="col" class="text-center">Fecha de creación</th>
+                <th scope="col" class="text-center">Valor</th>
+                <th scope="col" class="text-center">Mes</th>
+                <th scope="col" class="text-center">Cliente dueño</th>
+                <th scope="col" class="text-center">Cliente que utiliza</th>
                 <th scope="col" class="text-center">Acciones</th>
             </tr>
         </thead>
@@ -128,24 +117,23 @@ if($resultadoPedido and $resultadoPedido->num_rows > 0):
 
             <?php
             // Iterar sobre los registros que llegaron
-            foreach ($resultadoPedido as $fila):
+            foreach ($resultadoBonoRegalo as $fila):
             ?>
 
             <!-- Fila que se generará -->
             <tr>
                 <!-- Cada una de las columnas, con su valor correspondiente -->
                 <td class="text-center"><?= $fila["codigo"]; ?></td>
-                <td class="text-center"><?= $fila["fecha_compra"]; ?></td>
-                <td class="text-center">$<?= $fila["costo_total"]; ?></td>
-                <td class="text-center"><?= $fila["tipo_pedido"]; ?></td>
-                <td class="text-center"><?= $fila["direccion_envio"]; ?></td>
-                <td class="text-center"><?= $fila["empleado_atiende"] !== null ? 'C.C. ' . $fila["empleado_atiende"] : ''; ?></td>
-                <td class="text-center"><?= $fila["empleado_envia"] !== null ? 'C.C. ' . $fila["empleado_envia"] : ''; ?></td>
+                <td class="text-center"><?= $fila["fecha_creacion"]; ?></td>
+                <td class="text-center">$<?= $fila["valor"]; ?></td>
+                <td class="text-center"><?= $fila["mes"]; ?></td>
+                <td class="text-center"><?= $fila["cliente_dueno"] !== null ? 'C.C. ' . $fila["cliente_dueno"] : ''; ?></td>
+                <td class="text-center"><?= $fila["cliente_utiliza"] !== null ? 'C.C. ' . $fila["cliente_utiliza"] : ''; ?></td>
 
                 
                 <!-- Botón de eliminar. Debe de incluir la CP de la entidad para identificarla -->
                 <td class="text-center">
-                    <form action="pedido_delete.php" method="post">
+                    <form action="bono_regalo_delete.php" method="post">
                         <input hidden type="text" name="codigoEliminar" value="<?= $fila["codigo"]; ?>">
                         <button type="submit" class="btn btn-danger">Eliminar</button>
                     </form>

@@ -7,9 +7,9 @@ include "../includes/header.php";
 
 <p class="mt-3">
     Este formulario permite ingresar dos fechas f1 y f2 (cada fecha con día, mes y año),
-    f2 >= f1 y una dirección. Se debe mostrar todos los datos de los pedidos que tienen fecha de
-    creación entre f1 (inclusive) y f2 (inclusive), que son de la dirección ingresada,
-    que fueron atendidas por algún empleado y que fueron enviados por algún empleado.
+    f2 >= f1 y un mes. Se debe mostrar todos los datos de los bonos que tienen fecha de
+    creación entre f1 (inclusive) y f2 (inclusive), que son del mes ingresado,
+    que tienen un cliente dueño y que fue utilizado por otro cliente.
 </p>
 
 <!-- FORMULARIO. Cambiar los campos de acuerdo a su trabajo -->
@@ -29,8 +29,8 @@ include "../includes/header.php";
         </div>
 
         <div class="mb-3">
-            <label for="direccion" class="form-label">Dirección</label>
-            <input type="text" class="form-control" id="direccion" name="direccion" required>
+            <label for="mes" class="form-label">Mes</label>
+            <input type="text" class="form-control" id="mes" name="mes" required>
         </div>
 
         <button type="submit" class="btn btn-primary">Buscar</button>
@@ -48,14 +48,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
 
     $fecha1 = $_POST["fecha1"];
     $fecha2 = $_POST["fecha2"];
-    $direccion = $_POST["direccion"];
+    $mes = $_POST["mes"];
 
     // Query SQL a la BD
-    $query = "SELECT * FROM pedido 
-              WHERE fecha_compra BETWEEN '$fecha1' AND '$fecha2' 
-              AND direccion_envio = '$direccion'
-              AND empleado_atiende IS NOT NULL
-              AND empleado_envia IS NOT NULL";
+    $query = "SELECT * FROM bono_regalo 
+              WHERE fecha_creacion BETWEEN '$fecha1' AND '$fecha2' 
+              AND mes = '$mes'
+              AND cliente_utiliza IS NOT NULL
+              AND cliente_dueno IS NOT NULL";
 
     // Ejecutar la consulta
     $resultadoB2 = mysqli_query($conn, $query) or die(mysqli_error($conn));
@@ -76,11 +76,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
                 <tr>
                     <th scope="col" class="text-center">Código</th>
                     <th scope="col" class="text-center">Fecha de Compra</th>
-                    <th scope="col" class="text-center">Costo Total</th>
-                    <th scope="col" class="text-center">Tipo de Pedido</th>
-                    <th scope="col" class="text-center">Dirección de Envío</th>
-                    <th scope="col" class="text-center">Empleado que Atiende</th>
-                    <th scope="col" class="text-center">Empleado que Envia</th>
+                    <th scope="col" class="text-center">Valor</th>
+                    <th scope="col" class="text-center">Mes</th>
+                    <th scope="col" class="text-center">Cliente dueño</th>
+                    <th scope="col" class="text-center">Cliente que utiliza</th>
                 </tr>
             </thead>
 
@@ -95,12 +94,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
                     <tr>
                         <!-- Cada una de las columnas, con su valor correspondiente -->
                         <td class="text-center"><?= $fila["codigo"]; ?></td>
-                        <td class="text-center"><?= $fila["fecha_compra"]; ?></td>
-                        <td class="text-center"><?= $fila["costo_total"]; ?></td>
-                        <td class="text-center"><?= $fila["tipo_pedido"]; ?></td>
-                        <td class="text-center"><?= $fila["direccion_envio"]; ?></td>
-                        <td class="text-center"><?= $fila["empleado_atiende"]; ?></td>
-                        <td class="text-center"><?= $fila["empleado_envia"]; ?></td>
+                        <td class="text-center"><?= $fila["fecha_creacion"]; ?></td>
+                        <td class="text-center"><?= $fila["valor"]; ?></td>
+                        <td class="text-center"><?= $fila["mes"]; ?></td>
+                        <td class="text-center"><?= $fila["cliente_dueno"]; ?></td>
+                        <td class="text-center"><?= $fila["cliente_utiliza"]; ?></td>
                     </tr>
 
                 <?php

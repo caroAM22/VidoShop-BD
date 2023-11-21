@@ -3,12 +3,12 @@ include "../includes/header.php";
 ?>
 
 <!-- TÍTULO. Cambiarlo, pero dejar especificada la analogía -->
-<h1 class="mt-3">Entidad análoga a CLIENTE (EMPLEADO)</h1>
+<h1 class="mt-3">Entidad análoga a CLIENTE (CLIENTE)</h1>
 
 <!-- FORMULARIO. Cambiar los campos de acuerdo a su trabajo -->
 <div class="formulario p-4 m-3 border rounded-3">
 
-    <form action="empleado_insert.php" method="post" class="form-group">
+    <form action="cliente_insert.php" method="post" class="form-group">
 
         <div class="mb-3">
             <label for="cedula" class="form-label">Cédula</label>
@@ -21,13 +21,18 @@ include "../includes/header.php";
         </div>
 
         <div class="mb-3">
-            <label for="fecha_contratacion" class="form-label">Fecha contratación</label>
-            <input type="date" class="form-control" id="fecha_contratacion" name="fecha_contratacion" required>
+            <label for="numero_contacto" class="form-label">Número de contacto</label>
+            <input type="number" class="form-control" id="numero_contacto" name="numero_contacto" required>
         </div>
 
         <div class="mb-3">
-            <label for="salario" class="form-label">Salario</label>
-            <input type="number" class="form-control" id="salario" name="salario" required>
+            <label for="saldo" class="form-label">Saldo</label>
+            <input type="number" class="form-control" id="saldo" name="saldo" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="correo_electronico" class="form-label">Correo electronico</label>
+            <input type="text" class="form-control" id="correo_electronico" name="correo_electronico">
         </div>
 
         <button type="submit" class="btn btn-primary">Agregar</button>
@@ -38,10 +43,10 @@ include "../includes/header.php";
 
 <?php
 // Importar el código del otro archivo
-require("empleado_select.php");
+require("cliente_select.php");
 
 // Verificar si llegan datos
-if($resultadoEmpleado and $resultadoEmpleado->num_rows > 0):
+if($resultadoCliente and $resultadoCliente->num_rows > 0):
 ?>
 
 <!-- MOSTRAR LA TABLA. Cambiar las cabeceras -->
@@ -54,8 +59,9 @@ if($resultadoEmpleado and $resultadoEmpleado->num_rows > 0):
             <tr>
                 <th scope="col" class="text-center">Cédula</th>
                 <th scope="col" class="text-center">Nombre</th>
-                <th scope="col" class="text-center">Fecha contratación</th>
-                <th scope="col" class="text-center">Salario</th>
+                <th scope="col" class="text-center">Número de contacto</th>
+                <th scope="col" class="text-center">Saldo</th>
+                <th scope="col" class="text-center">Correo electronico</th>
                 <th scope="col" class="text-center">Acciones</th>
             </tr>
         </thead>
@@ -64,7 +70,7 @@ if($resultadoEmpleado and $resultadoEmpleado->num_rows > 0):
 
             <?php
             // Iterar sobre los registros que llegaron
-            foreach ($resultadoEmpleado as $fila):
+            foreach ($resultadoCliente as $fila):
             ?>
 
             <!-- Fila que se generará -->
@@ -72,12 +78,13 @@ if($resultadoEmpleado and $resultadoEmpleado->num_rows > 0):
                 <!-- Cada una de las columnas, con su valor correspondiente -->
                 <td class="text-center"><?= $fila["cedula"]; ?></td>
                 <td class="text-center"><?= $fila["nombre"]; ?></td>
-                <td class="text-center"><?= $fila["fecha_contratacion"]; ?></td>
-                <td class="text-center"><?= $fila["salario"]; ?></td>
+                <td class="text-center"><?= $fila["numero_contacto"]; ?></td>
+                <td class="text-center"><?= $fila["saldo"]; ?></td>
+                <td class="text-center"><?= $fila["correo_electronico"]; ?></td>
                 
                 <!-- Botón de eliminar. Debe de incluir la CP de la entidad para identificarla -->
                 <td class="text-center">
-                    <form action="empleado_delete.php" method="post">
+                    <form action="cliente_delete.php" method="post">
                         <input hidden type="text" name="cedulaEliminar" value="<?= $fila["cedula"]; ?>">
                         <button type="submit" class="btn btn-danger">Eliminar</button>
                     </form>

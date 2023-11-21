@@ -43,8 +43,8 @@
     <div class="enlaces">
         <h2>Enlaces</h2>
         <ul>
-            <li><a href="empleado/empleado.php">Entidad análoga a CLIENTE (EMPLEADO)</a></li>
-            <li><a href="pedido/pedido.php">Entidad análoga a CASILLERO (PEDIDO)</a></li>
+            <li><a href="cliente/cliente.php">Entidad análoga a CLIENTE (CLIENTE)</a></li>
+            <li><a href="bono_regalo/bono_regalo.php">Entidad análoga a CASILLERO (BONO REGALO)</a></li>
             <li><a href="consultas/consulta1.php">Consulta 1</a></li>
             <li><a href="consultas/consulta2.php">Consulta 2</a></li>
             <li><a href="busqueda/busqueda1.php">Búsqueda 1</a></li>

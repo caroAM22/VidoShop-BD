@@ -7,11 +7,11 @@ include "../includes/header.php";
 
 <p class="mt-3">
     La segunda consulta muestra la cédula, el nombre y el número de
-    pedidos que atendió cada empleado que cumple las siguientes dos condiciones:
+    bonos de regalo que ha usado cada cliente que cumple las siguientes dos condiciones:
 
     <ol>
-        <li>Todos sus pedidos tienen la misma dirección.</li>
-        <li>Debe tener al menos tres pedidos (es decir, deber tener 3, 4 o más pedidos).</li>
+        <li>Todos sus bonos usados han sido para el mismo mes</li>
+        <li>Debe haber usado al menos 3 bonos (es decir, deber haber utilizado 3, 4 o más).</li>
     </ol>
 </p>
 
@@ -21,17 +21,11 @@ include "../includes/header.php";
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     require('../config/conexion.php');
 
-    $query = "SELECT e.cedula, e.nombre, COUNT(p.codigo) AS num_pedidos
-              FROM empleado e
-              JOIN pedido p ON e.cedula = p.empleado_atiende
-              WHERE p.direccion_envio IS NOT NULL
-                AND (
-                    SELECT COUNT(DISTINCT direccion_envio)
-                    FROM pedido
-                    WHERE empleado_atiende = e.cedula
-                ) = 1
-              GROUP BY e.cedula, e.nombre
-              HAVING num_pedidos >= 3";
+    $query = "SELECT c.cedula, c.nombre, COUNT(*) AS num_bonos
+              FROM cliente c
+              JOIN bono_regalo b ON c.cedula = b.cliente_utiliza
+              GROUP BY c.cedula
+              HAVING COUNT(DISTINCT b.mes) = 1 AND num_bonos >= 3";
 
     $resultadoC2 = mysqli_query($conn, $query) or die(mysqli_error($conn));
 
@@ -47,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             <tr>
                 <th scope="col" class="text-center">Cédula</th>
                 <th scope="col" class="text-center">Nombre</th>
-                <th scope="col" class="text-center">Número de Pedidos</th>
+                <th scope="col" class="text-center">Número de Bonos</th>
             </tr>
         </thead>
         <tbody>
@@ -57,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             <tr>
                 <td class="text-center"><?= $fila["cedula"]; ?></td>
                 <td class="text-center"><?= $fila["nombre"]; ?></td>
-                <td class="text-center"><?= $fila["num_pedidos"]; ?></td>
+                <td class="text-center"><?= $fila["num_bonos"]; ?></td>
             </tr>
             <?php
             endforeach;

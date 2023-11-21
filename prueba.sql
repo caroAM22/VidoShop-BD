@@ -1,31 +1,22 @@
 use vido_shop;
 
-ALTER TABLE empleado
-MODIFY COLUMN salario INT(10) CHECK (salario > 0) NOT NULL;
-CREATE TABLE empleado( 
+CREATE TABLE cliente( 
   cedula INT(10) PRIMARY KEY,
   nombre VARCHAR(50) NOT NULL,
-  fecha_contratacion DATE NOT NULL, 
-  salario INT(10) CHECK (salario > 0) NOT NULL
+  numero_contacto INT(10) CHECK(numero_contacto > 0) NOT NULL, 
+  saldo INT(8) CHECK (saldo > 0) NOT NULL,
+  correo_electronico VARCHAR(50)
 );
 
-DROP TABLE pedido;
-
-CREATE TABLE pedido( 
+CREATE TABLE bono_regalo( 
   codigo INT AUTO_INCREMENT PRIMARY KEY,
-  fecha_compra DATE NOT NULL, 
-  costo_total INT(8) CHECK(costo_total > 0) NOT NULL,
-  tipo_pedido VARCHAR(10) CHECK (tipo_pedido IN ('Virtual', 'Presencial')) NOT NULL, 
-  direccion_envio VARCHAR(50) NULL, 
-  empleado_atiende INT(10) NULL, 
-  empleado_envia INT(10) NULL, 
-  FOREIGN KEY (empleado_atiende) REFERENCES empleado(cedula),
-  FOREIGN KEY (empleado_envia) REFERENCES empleado(cedula),
-  CHECK (
-    (tipo_pedido = 'Virtual' AND direccion_envio IS NOT NULL)
-    OR 
-    (tipo_pedido = 'Presencial' AND direccion_envio IS NULL)
-  ),
-  CHECK (empleado_atiende <> empleado_envia)
+  fecha_creacion DATE NOT NULL, 
+  valor INT(6) CHECK(valor > 0) NOT NULL,
+  mes VARCHAR(10) CHECK(mes IN ("Enero","Febrero","Marzo","Septiembre","Noviembre")) NOT NULL, 
+  cliente_dueno INT(10), 
+  cliente_utiliza INT(10), 
+  FOREIGN KEY (cliente_dueno) REFERENCES cliente(cedula),
+  FOREIGN KEY (cliente_utiliza) REFERENCES cliente(cedula),
+  CHECK (cliente_dueno <> cliente_utiliza)
 );
 

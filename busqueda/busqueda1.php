@@ -6,9 +6,9 @@ include "../includes/header.php";
 <h1 class="mt-3">Búsqueda 1</h1>
 
 <p class="mt-3">
-    Este formulario permite ingresar la cédula de un empleado. 
-    Luego, se muestra el código y la fecha de compra de todos los pedidos que el empleado atendió, 
-    siempre y cuando estos pedidos no hayan sido enviados por algún empleado.
+    Este formulario permite ingresar la cédula de un cliente. 
+    Luego, se muestra el código y la fecha de creación de todos los bonos que el cliente utilizó, 
+    siempre y cuando estos bonos no sean propiedad de algún cliente.
 </p>
 
 <!-- FORMULARIO. Cambiar los campos de acuerdo a su trabajo -->
@@ -18,11 +18,11 @@ include "../includes/header.php";
     <form action="busqueda1.php" method="post" class="form-group">
 
         <div class="mb-3">
-            <label for="cedula" class="form-label">Cédula del Empleado</label>
+            <label for="cedula" class="form-label">Cédula del cliente</label>
             <input type="text" class="form-control" id="cedula" name="cedula" required>
         </div>
 
-        <button type="submit" class="btn btn-primary">Buscar Pedidos</button>
+        <button type="submit" class="btn btn-primary">Buscar Bonos</button>
 
     </form>
     
@@ -38,7 +38,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
     $cedula = $_POST["cedula"];
 
     // Query SQL a la BD para obtener los pedidos del empleado
-    $query = "SELECT codigo, fecha_compra FROM pedido WHERE empleado_atiende = '$cedula' AND empleado_envia IS NULL";
+    $query = "SELECT codigo, fecha_creacion 
+              FROM bono_regalo
+              WHERE cliente_utiliza = '$cedula' AND cliente_dueno IS NULL";
 
     // Ejecutar la consulta
     $resultadoPedido = mysqli_query($conn, $query) or die(mysqli_error($conn));
@@ -58,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
         <thead class="table-dark">
             <tr>
                 <th scope="col" class="text-center">Código</th>
-                <th scope="col" class="text-center">Fecha de Compra</th>
+                <th scope="col" class="text-center">Fecha de creación</th>
             </tr>
         </thead>
 
@@ -73,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
             <tr>
                 <!-- Cada una de las columnas, con su valor correspondiente -->
                 <td class="text-center"><?= $fila["codigo"]; ?></td>
-                <td class="text-center"><?= $fila["fecha_compra"]; ?></td>
+                <td class="text-center"><?= $fila["fecha_creacion"]; ?></td>
             </tr>
 
             <?php

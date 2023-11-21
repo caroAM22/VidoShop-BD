@@ -6,22 +6,23 @@ include "../includes/header.php";
 <h1 class="mt-3">Consulta 1</h1>
 
 <p class="mt-3">
-    La primera consulta muestra la cédula y el nombre de cada empleado cuyo
-    salario sea mayor o igual a la suma de los costos totales correspondiente a los pedidos que atendio.
+    La primera consulta muestra la cédula y el nombre de cada cliente cuyo
+    saldo es mayor o igual a la suma de los valores correspondientes a los bonos de regalo que utilizo.
 </p>
 
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     require('../config/conexion.php');
 
-    $query = "SELECT e.cedula, e.nombre
-              FROM empleado e
-              JOIN pedido p ON e.cedula = p.empleado_atiende
-              WHERE e.salario >= (
-                  SELECT SUM(costo_total)
-                  FROM pedido
-                  WHERE empleado_atiende = e.cedula
-              )";
+    #El coalesce hace que cuando el subquery de null lo vuelva 0 por defecto. Es decir un cliente que no 
+    #usado nunca un bono_regalo también debe salir en la consulta.
+    $query = "SELECT c.cedula, c.nombre
+              FROM cliente c
+              WHERE c.saldo >= COALESCE((
+                  SELECT SUM(valor)
+                  FROM bono_regalo b
+                  WHERE b.cliente_utiliza = c.cedula
+              ),0)";
 
     $resultadoBusqueda = mysqli_query($conn, $query) or die(mysqli_error($conn));
 
