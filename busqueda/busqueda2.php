@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
                     <tr>
                         <!-- Cada una de las columnas, con su valor correspondiente -->
                         <td class="text-center"><?= $fila["codigo"]; ?></td>
-                        <td class="text-center"><?= $fila["fecha_creacion"]; ?></td>
+                        <td class="text-center"><?= date("d-m-Y", strtotime($fila["fecha_creacion"])); ?></td>
                         <td class="text-center"><?= $fila["valor"]; ?></td>
                         <td class="text-center"><?= $fila["mes"]; ?></td>
                         <td class="text-center"><?= $fila["cliente_dueno"]; ?></td>

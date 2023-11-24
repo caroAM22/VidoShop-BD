@@ -8,6 +8,7 @@ CREATE TABLE cliente(
   correo_electronico VARCHAR(50)
 );
 
+drop TABLE bono_regalo;
 CREATE TABLE bono_regalo( 
   codigo INT AUTO_INCREMENT PRIMARY KEY,
   fecha_creacion DATE NOT NULL, 
@@ -17,6 +18,7 @@ CREATE TABLE bono_regalo(
   cliente_utiliza INT(10), 
   FOREIGN KEY (cliente_dueno) REFERENCES cliente(cedula),
   FOREIGN KEY (cliente_utiliza) REFERENCES cliente(cedula),
-  CHECK (cliente_dueno <> cliente_utiliza)
+  CHECK (cliente_dueno <> cliente_utiliza),
+  UNIQUE(cliente_dueno)
 );
 
