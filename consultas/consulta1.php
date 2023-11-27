@@ -7,15 +7,15 @@ include "../includes/header.php";
 
 <p class="mt-3">
     La primera consulta muestra la cédula y el nombre de cada cliente cuyo
-    saldo es mayor o igual a la suma de los valores correspondientes a los bonos de regalo que utilizo.
+    saldo es mayor o igual a la suma de los valores correspondientes a los bonos de regalo que utilizó.
 </p>
 
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     require('../config/conexion.php');
 
-    #El coalesce hace que cuando el subquery de null lo vuelva 0 por defecto. Es decir un cliente que no 
-    #usado nunca un bono_regalo también debe salir en la consulta.
+    # El coalesce hace que cuando el subquery de null lo vuelva 0 por defecto. Es decir un cliente que no
+    # ha usado nunca un bono_regalo también debe salir en la consulta.
     $query = "SELECT c.cedula, c.nombre
               FROM cliente c
               WHERE c.saldo >= COALESCE((

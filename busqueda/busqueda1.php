@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
     $cedula = $_POST["cedula"];
 
     // Query SQL a la BD para obtener los pedidos del empleado
-    $query = "SELECT codigo, fecha_creacion 
+    $query = "SELECT codigo, DATE_FORMAT(fecha_creacion, '%d-%m-%Y') AS fecha_creacion 
               FROM bono_regalo
               WHERE cliente_utiliza = '$cedula' AND cliente_dueno IS NULL";
 
@@ -94,7 +94,7 @@ else:
 ?>
 
 <div class="alert alert-danger text-center mt-5">
-    No se encontraron resultados para esta consulta
+    No se encontraron resultados para esta búsqueda
 </div>
 
 <?php

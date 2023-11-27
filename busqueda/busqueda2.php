@@ -53,9 +53,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
     // Query SQL a la BD
     $query = "SELECT * FROM bono_regalo 
               WHERE fecha_creacion BETWEEN '$fecha1' AND '$fecha2' 
-              AND mes = '$mes'
-              AND cliente_utiliza IS NOT NULL
-              AND cliente_dueno IS NOT NULL";
+                AND mes = '$mes'
+                AND cliente_utiliza IS NOT NULL
+                AND cliente_dueno IS NOT NULL";
 
     // Ejecutar la consulta
     $resultadoB2 = mysqli_query($conn, $query) or die(mysqli_error($conn));
@@ -95,10 +95,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
                         <!-- Cada una de las columnas, con su valor correspondiente -->
                         <td class="text-center"><?= $fila["codigo"]; ?></td>
                         <td class="text-center"><?= date("d-m-Y", strtotime($fila["fecha_creacion"])); ?></td>
-                        <td class="text-center"><?= $fila["valor"]; ?></td>
+                        <td class="text-center">$<?= $fila["valor"]; ?></td>
                         <td class="text-center"><?= $fila["mes"]; ?></td>
-                        <td class="text-center"><?= $fila["cliente_dueno"]; ?></td>
-                        <td class="text-center"><?= $fila["cliente_utiliza"]; ?></td>
+                        <td class="text-center"><?= 'C.C. ' . $fila["cliente_dueno"] . ''; ?></td>
+                        <td class="text-center"><?= 'C.C. ' . $fila["cliente_utiliza"] . ''; ?></td>
                     </tr>
 
                 <?php
@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
 <?php else : ?>
 
     <div class="alert alert-danger text-center mt-5">
-        No se encontraron resultados para esta consulta
+        No se encontraron resultados para esta búsqueda
     </div>
 
 <?php

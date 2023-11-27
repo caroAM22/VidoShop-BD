@@ -76,10 +76,10 @@ if($resultadoCliente and $resultadoCliente->num_rows > 0):
             <!-- Fila que se generará -->
             <tr>
                 <!-- Cada una de las columnas, con su valor correspondiente -->
-                <td class="text-center"><?= $fila["cedula"]; ?></td>
+                <td class="text-center"><?= 'C.C. ' . $fila["cedula"] . ''; ?></td>
                 <td class="text-center"><?= $fila["nombre"]; ?></td>
                 <td class="text-center"><?= $fila["numero_contacto"]; ?></td>
-                <td class="text-center"><?= $fila["saldo"]; ?></td>
+                <td class="text-center">$<?= $fila["saldo"]; ?></td>
                 <td class="text-center"><?= $fila["correo_electronico"]; ?></td>
                 
                 <!-- Botón de eliminar. Debe de incluir la CP de la entidad para identificarla -->

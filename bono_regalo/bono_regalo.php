@@ -130,7 +130,6 @@ if($resultadoBonoRegalo and $resultadoBonoRegalo->num_rows > 0):
                 <td class="text-center"><?= $fila["cliente_dueno"] !== null ? 'C.C. ' . $fila["cliente_dueno"] : ''; ?></td>
                 <td class="text-center"><?= $fila["cliente_utiliza"] !== null ? 'C.C. ' . $fila["cliente_utiliza"] : ''; ?></td>
 
-                
                 <!-- Botón de eliminar. Debe de incluir la CP de la entidad para identificarla -->
                 <td class="text-center">
                     <form action="bono_regalo_delete.php" method="post">

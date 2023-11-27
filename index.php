@@ -35,9 +35,9 @@
     </div>
 
     <div class="modelo">
-        <h2>Modelo E-R parte analoga</h2>
+        <h2>Modelo E-R parte análoga</h2>
         <p></p>
-        <img src="modelo.png">
+        <img src="img_modelo.png">
     </div>
 
     <div class="enlaces">
