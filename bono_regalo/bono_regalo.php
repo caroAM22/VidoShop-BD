@@ -1,6 +1,11 @@
 <?php
 include "../includes/header.php";
+
 ?>
+
+<head>
+    <link rel="stylesheet" href="../styles.css" type="text/css">
+</head>
 
 <!-- TÍTULO. Cambiarlo, pero dejar especificada la analogía -->
 <h1 class="mt-3">Entidad análoga a CASILLERO (BONO REGALO)</h1>

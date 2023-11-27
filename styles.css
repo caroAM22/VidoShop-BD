@@ -1,7 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300&display=swap');
+
 body {
-    background-color: blueviolet;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    background-color: #ffe0e9;
+    font-family: 'Be Vietnam Pro', sans-serif;
 }
 
-h1 {
-    color: green;
+.container {
+    align-items: center;
+    justify-content: center;
+}
+
+h1, h2{
+    font-family: 'Righteous', cursive;
+}
+
+.output{
+    width: 100%;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    background-color: #FFF;
+    border-radius: 17px;
+    border: 1px solid #CED4DA;
+    color: #495057;
+}
+
+.link{
+    color: #212529;
+}
+.link:hover{
+    color: #212529;
+    text-decoration: none;
+}
+
+.alert-danger{
+    background-color: rgba(255, 0, 0, 0.39);
+    color: rgba(0, 0, 0, 0.763);
+    font-weight: bold;
 }
